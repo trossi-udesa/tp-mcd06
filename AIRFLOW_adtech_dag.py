@@ -7,7 +7,6 @@ import psycopg2
 from datetime import datetime, timedelta
 import os
 
-# Configuración de conexión a GCP y SQL
 GCP_BUCKET = 'adtech-bucket-1'
 GCP_PROJECT = 'tp-mcd06-1'
 POSTGRES_HOST = '35.198.4.250'
@@ -16,7 +15,6 @@ POSTGRES_DB = 'adtech'
 POSTGRES_USER = 'postgres'
 POSTGRES_PASSWORD = '(N|Sb?_G#y0]qG8m'
 
-# Función para descargar archivos desde GCP Storage
 def download_files_from_gcs():
     client = storage.Client(project=GCP_PROJECT)
     bucket = client.bucket(GCP_BUCKET)
@@ -27,14 +25,12 @@ def download_files_from_gcs():
         blob.download_to_filename(f"/tmp/{blob_name}")
     print("Archivos descargados correctamente")
 
-# Función para calcular recomendaciones
 def calcular_recomendaciones():
-    # Importar los datos
+    
     advertiser_ids_df = pd.read_csv('/tmp/advertiser_ids.csv')
     product_views_df = pd.read_csv('/tmp/product_views.csv')
     ads_views_df = pd.read_csv('/tmp/ads_views.csv')
 
-    # Filtrar por la última semana
     today = datetime.now() - timedelta(days=1)
     seven_days_ago = today - timedelta(days=6)
     today_str = today.strftime('%Y-%m-%d')
@@ -79,7 +75,6 @@ def calcular_recomendaciones():
 
     reco2_df = pd.DataFrame(reco2_list)
 
-    # Guardar en la base de datos
     conn = psycopg2.connect(
         host=POSTGRES_HOST,
         port=POSTGRES_PORT,
@@ -89,7 +84,6 @@ def calcular_recomendaciones():
     )
     cursor = conn.cursor()
 
-    # Insertar los datos de reco1_df (sin borrar los existentes)
     for _, row in reco1_df.iterrows():
         cursor.execute(
             """
@@ -101,7 +95,6 @@ def calcular_recomendaciones():
             (row['advertiser_id'], row['date'], row['product_reco'])
         )
 
-    # Insertar los datos de reco2_df (sin borrar los existentes)
     for _, row in reco2_df.iterrows():
         cursor.execute(
             """
@@ -119,7 +112,6 @@ def calcular_recomendaciones():
 
     print("Datos guardados correctamente en la base de datos")
 
-# Definir el DAG
 default_args = {
     'owner': 'trossi',
     'retries': 2,
