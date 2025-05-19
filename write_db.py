@@ -4,21 +4,18 @@ import logging
 import psycopg2
 
 def main():
-    #Cloud Storage
+    
     base_path = 'gs://adtech-tp-2025/raw/'
 
-    #Leer raw data de buckets
     advertiser_ids_df = pd.read_csv(base_path + 'advertiser_ids.csv')
     product_views_df = pd.read_csv(base_path + 'product_views.csv')
     ads_views_df = pd.read_csv(base_path + 'ads_views.csv')
 
-    # Preprocesar fechas
     product_views_df['date'] = pd.to_datetime(product_views_df['date'])
     ads_views_df['date'] = pd.to_datetime(ads_views_df['date'])
     impressions_df = ads_views_df[ads_views_df['type'] == 'impression']
     clicks_df = ads_views_df[ads_views_df['type'] == 'click']
 
-    #Conexión a PostgreSQL
     conn = psycopg2.connect(
         host="35.198.4.250",
         dbname="adtech-db-1",
@@ -28,7 +25,6 @@ def main():
     )
     cursor = conn.cursor()
 
-    # Recorrer los 33 días desde 2025-04-28 hasta 2025-05-31
     start_date = datetime(2025, 4, 28)
     end_date = datetime(2025, 5, 31)
     current_date = start_date
@@ -80,7 +76,6 @@ def main():
         reco1_df = pd.DataFrame(reco1_list)
         reco2_df = pd.DataFrame(reco2_list)
 
-        # Insertar resultados de reco1_df en la base de datos
         for _, row in reco1_df.iterrows():
             cursor.execute("""
                 INSERT INTO top_product (advertiser_id, date, product_reco)
@@ -91,7 +86,6 @@ def main():
 
         print(f"Guardado en DB para {hoy.strftime('%Y-%m-%d')} con {len(reco1_df)} filas.")
 
-        # Insertar resultados de reco2_df en la base de datos
         for _, row in reco2_df.iterrows():
             cursor.execute("""
                 INSERT INTO top_ctr (advertiser_id, date, product_reco)
