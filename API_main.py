@@ -7,10 +7,10 @@ from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
-DB_HOST = os.environ.get("DB_HOST", "35.198.4.250")
+DB_HOST = # quitado para que no nos bajen el servicio
 DB_PORT = os.environ.get("DB_PORT", "5432")
-DB_USER = os.environ.get("DB_USER", "postgres")
-DB_PASSWORD = os.environ.get("DB_PASSWORD", "(N|Sb?_G#y0]qG8m")
+DB_USER = # quitado para que no nos bajen el servicio
+DB_PASSWORD = # quitado para que no nos bajen el servicio
 DB_NAME = os.environ.get("DB_NAME", "adtech-db-1")
 
 def get_db_connection():
