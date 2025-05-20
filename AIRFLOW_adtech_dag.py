@@ -9,11 +9,11 @@ import os
 
 GCP_BUCKET = 'adtech-bucket-1'
 GCP_PROJECT = 'tp-mcd06-1'
-POSTGRES_HOST = '35.198.4.250'
+POSTGRES_HOST = # quitado para que no nos bajen el servicio
 POSTGRES_PORT = '5432'
 POSTGRES_DB = 'adtech'
-POSTGRES_USER = 'postgres'
-POSTGRES_PASSWORD = '(N|Sb?_G#y0]qG8m'
+POSTGRES_USER = # quitado para que no nos bajen el servicio
+POSTGRES_PASSWORD = # quitado para que no nos bajen el servicio
 
 def download_files_from_gcs():
     client = storage.Client(project=GCP_PROJECT)
