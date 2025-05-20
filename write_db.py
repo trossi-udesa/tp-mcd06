@@ -17,10 +17,10 @@ def main():
     clicks_df = ads_views_df[ads_views_df['type'] == 'click']
 
     conn = psycopg2.connect(
-        host="35.198.4.250",
+        host= # quitado para que no nos bajen el servicio
         dbname="adtech-db-1",
-        user="postgres",
-        password="(N|Sb?_G#y0]qG8m",
+        user=# quitado para que no nos bajen el servicio
+        password=# quitado para que no nos bajen el servicio
         port=5432
     )
     cursor = conn.cursor()
